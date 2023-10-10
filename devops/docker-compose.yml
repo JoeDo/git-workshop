@@ -1,0 +1,57 @@
+# Adapted from Kevin Collins's Standard Architecture Example
+# Make sure to review the `README.md` file before running `docker compose up -d`.
+# https://inductiveautomation.com/ignition/architectures
+# https://inductiveautomation.com/static/pdf/IgnitionArchitecture-Standard.pdf
+---
+x-default-logging: &default-logging
+    logging:
+        options:
+            max-size: "100m"
+            max-file: "5"
+        driver: json-file
+
+x-ignition-opts: &ignition-opts
+    <<: *default-logging
+    image: factorystackdevmgmtjoe.azurecr.io/factorystack:${IGNITION_VERSION:-8.1.32}-metal
+    env_file: .env
+
+services:
+    dev:
+        <<: *ignition-opts
+        hostname: dev
+        ports:
+            - 8088:8088
+        command: >
+            -n dev
+            -m ${GATEWAY_MAX_MEMORY:-1024}
+            -a dev.localtest.me
+            -h 8088
+            -s 8043
+            --
+            -Dignition.projects.scanFrequency=10
+        environment:
+            BRANCH: ${USERNAME}-dev
+        volumes:
+            - dev-data:/usr/local/bin/ignition/data
+
+    prod:
+        <<: *ignition-opts
+        hostname: prod
+        ports:
+            - 8089:8088
+        command: >
+            -n prod
+            -m ${GATEWAY_MAX_MEMORY:-1024}
+            -a prod.localtest.me
+            -h 8089
+            -s 8044
+            --
+            -Dignition.projects.scanFrequency=10
+        environment:
+            BRANCH: ${USERNAME}-prod
+        volumes:
+            - prod-data:/usr/local/bin/ignition/data
+
+volumes:
+    dev-data:
+    prod-data:
