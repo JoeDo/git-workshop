@@ -32,8 +32,8 @@ This document includes the procedure for folks who are following along with the 
 
 9.  Navigate to the following URLs in your web browser:
 
--   http://dev.localtest.me:8088/data/perspective/client/GitWorkshop
--   http://prod.localtest.me:8089/data/perspective/client/GitWorkshop
+-   http://dev.localtest.me:8088/web/home
+-   http://prod.localtest.me:8089/web/home
 
 9. Navigate to the following URL, replacing `USER` with the assigned username you used to login to Amazon WorkSpaces (e.g., `instructor381`).
 
